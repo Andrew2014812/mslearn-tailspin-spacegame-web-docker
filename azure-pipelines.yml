@@ -1,17 +1,21 @@
 stages:
+- stage: Build
+  displayName: 'Build stage'
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+    - script: echo "Building..."
+      displayName: 'Build step'
+
 - stage: Deploy
-  displayName: 'Deploy the container'
+  displayName: 'Deploy stage'
   dependsOn: Build
   jobs:
   - job: Deploy
-    displayName: 'Deploy job'
     pool:
       vmImage: 'ubuntu-20.04'
-    variables:
-      - group: Release
     steps:
-      - task: AzureWebAppContainer@1
-        inputs:
-          appName: $(WebAppName)
-          azureSubscription: 'Resource Manager - Tailspin - Space Game'
-          imageName: '$(RegistryName)/$(webRepository):$(build.buildId)'
+    - script: echo "Deploying..."
+      displayName: 'Deploy step'
